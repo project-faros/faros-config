@@ -36,6 +36,8 @@ jobs:
     - name: Bundle JS and run tests
       run: |
         tox -e js,test,report
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v1
   publish:
     needs:
     - lint
