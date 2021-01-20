@@ -2,8 +2,10 @@ name: Test Python
 
 on:
   pull_request_review:
-    types: [submitted]
-    branches: ['master', 'dev']
+    types:
+    - submitted
+    branches:
+    - master
     paths:
     - '**.py'
     - 'src/**'
