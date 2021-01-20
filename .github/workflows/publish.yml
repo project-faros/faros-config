@@ -54,5 +54,7 @@ jobs:
       run: |
         tox -e build
     - name: Publish packages to PyPi
+      env:
+        TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
       run: |
         tox -e release
