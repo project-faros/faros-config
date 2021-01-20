@@ -8,6 +8,7 @@ from flask import (
     url_for,
     send_from_directory
 )
+import secrets
 
 from .api_bp import api_bp
 from .form_bp import form_bp
@@ -15,9 +16,7 @@ from .form_bp import form_bp
 app = Flask(__name__)
 app.register_blueprint(api_bp, url_prefix='/api')
 app.register_blueprint(form_bp, url_prefix='/form')
-# This doesn't really matter for a local web application, but we need it for
-#   CSRF token generation.
-app.config['SECRET_KEY'] = 'ultra secure'
+app.config['SECRET_KEY'] = secrets.token_hex(16)
 
 
 @app.route('/')
