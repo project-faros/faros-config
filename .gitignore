@@ -1,0 +1,21 @@
+# Don't keep bower dependencies
+src/faros_config/ui/static/*/*
+# Keep the directory structure
+!src/faros_config/ui/static/*/.gitkeep
+
+# Development artifacts
+__pycache__
+*.egg-info
+*.swp
+tags
+data
+venv
+.tox
+.coverage
+coverage.xml
+
+# Packaging artifacts
+build
+dist
+node_modules
+yarn.lock

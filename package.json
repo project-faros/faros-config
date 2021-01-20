@@ -1,0 +1,13 @@
+{
+  "name": "faros-config",
+  "version": "0.1.0",
+  "description": "UI elements for generating configuration files for Project Faros",
+  "main": "setup.py",
+  "repository": "https://github.com/project-faros/faros-config",
+  "author": "James Harmison <jharmison@redhat.com>",
+  "license": "GNU GPL v3",
+  "private": true,
+  "dependencies": {
+    "patternfly": "3"
+  }
+}
