@@ -15,11 +15,13 @@ on:
     - 'static-assets.txt'
     - 'examples/**'
     - 'scripts/**'
-
+  push:
+    branches:
+    - master
 jobs:
   test:
     runs-on: ubuntu-latest
-    if: github.event.review.state == 'approved'
+    if: github.event_name == 'push' || github.event.review.state == 'approved'
     steps:
     - uses: actions/checkout@v2
     - name: Set up python environment
