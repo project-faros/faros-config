@@ -33,11 +33,10 @@ You can work on any part of the application at this point, testing your changes 
 
 ## Releases
 
-It is important to run `tox` before any release, not only because testing your releases is important but also because the `tox` command ensures that the Patternfly dependencies for the UI are in the appropriate locations for packaging. To generate a release, and push it to PyPi, ensure that you have a [PyPi](https://packaging.python.org/tutorials/packaging-projects/#uploading-the-distribution-archives) account, and [Twine](https://twine.readthedocs.io/en/latest/) is configured, then run the following:
+It is important to run `tox` before any release. To generate a release, and push it to PyPi, ensure that you have a [PyPi](https://packaging.python.org/tutorials/packaging-projects/#uploading-the-distribution-archives) account, and [Twine](https://twine.readthedocs.io/en/latest/) is configured, then run the following:
 
 ```shell
 git clean -xdf                                  # This completely sanitizes the directory to ensure a clean build. It's mostly optional, but a good idea.
-tox                                             # The importance of this cannot be overstated. You just removed all of the web app assets.
 git tag -s 0.1.0                                # Or some other semver-compliant tag - this marks this version as the release version.
 tox -e build,release                            # This will build source and binary distributions and publish them to PyPi. The versions of the packages are derived from the tag above.
 ```

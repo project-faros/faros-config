@@ -1,6 +1,9 @@
 #!/bin/bash -ex
 
+cd "$(dirname "$(realpath "$0")")/.."
+
 export STATIC_DIR=${STATIC_DIR:-src/faros_config/ui/static}
+export STATIC_ASSETS="$(cat static-assets.txt)"
 
 if ! command -v yarn; then
     if [ "$VIRTUAL_ENV" ]; then
@@ -17,17 +20,17 @@ fi
 
 yarn install
 
-while [ $# -gt 0 ]; do
-    case "$1" in
+for asset in ${STATIC_ASSETS}; do
+    case $asset in
         *.js)
-            cp "$1" $STATIC_DIR/js/ ;;
+            cp $asset $STATIC_DIR/js/ ;;
         *.css)
-            cp "$1" $STATIC_DIR/css/ ;;
+            cp $asset $STATIC_DIR/css/ ;;
         *.eot|*.svg|*.ttf|*.woff|*.woff2)
-            cp "$1" $STATIC_DIR/fonts/ ;;
+            cp $asset $STATIC_DIR/fonts/ ;;
         *)
             { set +x ; } &>/dev/null
-            echo "Unable to identify '$1'" >&2
+            echo "Unable to identify '$asset'" >&2
             exit 1 ;;
-    esac; shift
+    esac
 done
