@@ -2,13 +2,33 @@ name: Lint Python
 
 on:
   push:
+    branches:
+    - '*'
     tags-ignore:
     - '*'
+    paths:
+    - '**.py'
+    - 'src/**'
+    - 'setup.cfg'
+    - 'tox.ini'
+    - 'package.json'
+    - 'static-assets.txt'
+    - 'examples/**'
+    - 'scripts/**'
   pull_request:
     types:
     - opened
     - edited
     - reopened
+    paths:
+    - '**.py'
+    - 'src/**'
+    - 'setup.cfg'
+    - 'tox.ini'
+    - 'package.json'
+    - 'static-assets.txt'
+    - 'examples/**'
+    - 'scripts/**'
 
 jobs:
   lint:

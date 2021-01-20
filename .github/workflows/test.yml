@@ -18,6 +18,15 @@ on:
   push:
     branches:
     - master
+    paths:
+    - '**.py'
+    - 'src/**'
+    - 'setup.cfg'
+    - 'tox.ini'
+    - 'package.json'
+    - 'static-assets.txt'
+    - 'examples/**'
+    - 'scripts/**'
     tags-ignore:
     - '*'
 
