@@ -55,4 +55,4 @@ jobs:
         tox -e build
     - name: Publish packages to PyPi
       run: |
-        tox -e publish
+        tox -e release
