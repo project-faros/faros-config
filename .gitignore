@@ -11,6 +11,7 @@ tags
 data
 venv
 .tox
+.eggs
 .coverage
 coverage.xml
 
