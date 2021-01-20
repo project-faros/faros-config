@@ -4,7 +4,6 @@ on:
   push:
     tags:
     - '*'
-    branches: ['master']
 
 jobs:
   lint:
@@ -23,7 +22,6 @@ jobs:
         tox -e lint,security
   test:
     runs-on: ubuntu-latest
-    if: github.event.review.state == 'approved'
     steps:
     - uses: actions/checkout@v2
     - name: Set up python environment
