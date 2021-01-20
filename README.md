@@ -2,13 +2,14 @@
 
 This small library is used to validate configuration provided to Project Faros. It is designed to load a configuration file in YAML format from the Project Faros cluster-manager container's data directory and validate it against Pydantic models to ensure that the data is structured appropriately and valid. It returns the instantiated Pydantic object, which can be returned to a dictionary or JSON string depending on the nature of your operation with the configuration. It is used in Project Faros to validate and manipulate configuration files.
 
+[![codecov](https://codecov.io/gh/project-faros/faros-config/branch/master/graph/badge.svg?token=g4BJV474Tm)](https://codecov.io/gh/project-faros/faros-config) [![tests](https://img.shields.io/github/workflow/status/project-faros/faros-config/Test%20Python/master)](https://github.com/project-faros/faros-config/actions?query=workflow%3A%22Test+Python%22) [![downloads](https://img.shields.io/pypi/dw/faros-config?label=PyPI%20downloads)](https://pypi.org/project/faros-config/)
 ## User Interface
 
 Also included in the package is a user interface based on a Flask application. You can run it with any WSGI server, or a simple `flask run` for testing purposes. See the [Development](#development) section for more details. It is designed for users to generate, and validate, Project Faros compliant YAML configuration files for use in a Project Faros cluster-manager container. It can run outside of a cluster-manager container in order to generate raw YAML files, rather than placing them directly into the appropriate data directory, as well.
 
 ## Installation
 
-Faros Config is on [PyPi](https://pypi.org/project/faros-config/). If you are connected to the internet, you can run `pip install faros-config` to install the configuration library and web application. You shouldn't, though, as it's designed to be installed when building cluster-manager containers.
+Faros Config is on [PyPI](https://pypi.org/project/faros-config/). If you are connected to the internet, you can run `pip install faros-config` to install the configuration library and web application. You shouldn't, though, as it's designed to be installed when building cluster-manager containers.
 
 ## Development
 
@@ -33,15 +34,18 @@ You can work on any part of the application at this point, testing your changes 
 
 ## Releases
 
+The [GitHub workflow](.github/workflows/publish.yml) will automatically follow the release flow any time a tag is pushed. You can manually publish a release if you like.
+
 It is important to run `tox` before any release. To generate a release, and push it to PyPi, ensure that you have a [PyPi](https://packaging.python.org/tutorials/packaging-projects/#uploading-the-distribution-archives) account, and [Twine](https://twine.readthedocs.io/en/latest/) is configured, then run the following:
 
 ```shell
 git clean -xdf                                  # This completely sanitizes the directory to ensure a clean build. It's mostly optional, but a good idea.
 git tag -s 0.1.0                                # Or some other semver-compliant tag - this marks this version as the release version.
-tox -e build,release                            # This will build source and binary distributions and publish them to PyPi. The versions of the packages are derived from the tag above.
+tox -e build && tox -e release                  # This will build source and binary distributions, publishing them to PyPI if the build succeeds.
+# The versions of the packages are derived from the tag above.
 ```
 
-Note that you cannot release the package with the name `faros-config` because that is owned by the Project Faros maintainers. You should change the name if you need to publish it, or you can just use the `build` environment in `tox` and install from the files generated in the `dist` directory onto whatever host you're looking to get them to.
+Note that, if you're not a maintainer of this project, you cannot release the package with the name `faros-config` because that is owned by the Project Faros maintainers. You should change the name if you need to publish it, or you can just use the `build` environment in `tox` without `release` and install from the files generated in the `dist` directory onto whatever host you're looking to get them to.
 
 ## License
 
