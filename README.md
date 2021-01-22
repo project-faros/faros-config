@@ -26,6 +26,13 @@ tox                                             # This lints, uses yarn to downl
 python3 -m venv venv                            # This creates a virtual environment in a folder named "venv".
 . venv/bin/activate                             # This activates the virtual environment.
 pip install -e .                                # This installs the project to the venv in "editable" mode.
+
+# To manually run the tests and see their output directly, you can run
+pip install pytest python-dotenv
+dotenv -f devel.env run python3 -m tests.test_config_examples
+dotenv -f devel.env run python3 -m tests.test_inventory
+
+# To run the web app locally and see changes to the code reflected live, you can run
 export FLASK_APP=faros_config.ui                # This tells flask which app you're hacking on.
 export FLASK_ENV=development                    # This tells flask to run in "development" mode.
 flask run                                       # This starts the web application on localhost at HTTP port 5000
@@ -35,7 +42,7 @@ You can work on any part of the application at this point, testing your changes 
 
 ## Releases
 
-The [GitHub workflow](.github/workflows/publish.yml) will automatically follow the release flow any time a tag is pushed. You can manually publish a release if you like.
+The [GitHub workflow](.github/workflows/publish.yml) will automatically follow the release flow any time a tag is pushed. You can manually publish a release if you like, but you shouldn't.
 
 It is important to run `tox` before any release. To generate a release, and push it to PyPi, ensure that you have a [PyPi](https://packaging.python.org/tutorials/packaging-projects/#uploading-the-distribution-archives) account, and [Twine](https://twine.readthedocs.io/en/latest/) is configured, then run the following:
 

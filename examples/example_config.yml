@@ -52,8 +52,8 @@ cluster:
       mac: da:d5:de:ad:be:ef
       mgmt_mac: fe:eb:da:ed:5d:ad
 proxy:
-  http: proxy.example.com
-  https: secure-proxy.example.com
+  http: proxy.faros.site
+  https: secure-proxy.faros.site
   noproxy:
     - registry.access.redhat.com
   ca: |

@@ -327,19 +327,6 @@ def instantiate_inventory(config_path: str = '/data/config.yml'):
 
 
 def test_inventory_initialization():
-    env_var_mapping = {
-        'WAN_INT': 'eno2',
-        'BASTION_IP_ADDR': '10.1.1.10',
-        'BASTION_INTERFACES': 'eno1 eno5 eno3 eno4 enp1s0f4u4',
-        'BASTION_HOST_NAME': 'bastion',
-        'BASTION_SSH_USER': 'jharmison',
-        'CLUSTER_DOMAIN': 'jharmison.com',
-        'CLUSTER_NAME': 'kubeframe',
-        'BOOT_DRIVE': 'nvme0n1'
-    }
-    for env_var, env_var_value in env_var_mapping.items():
-        os.environ[env_var] = env_var_value
-
     for config_file in VALID_CONFIGS:
         instantiate_inventory(config_path=config_file)
 
