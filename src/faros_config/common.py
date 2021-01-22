@@ -16,10 +16,6 @@ class StrEnum(str, Enum):
     A mix-in of string and enum, representing itself as the string value.
     """
 
-    def __str__(self):
-        """Return the string value of the instantiated object."""
-        return self.value
-
 
 class PydanticEncoder(json.JSONEncoder):
     """Serialize Pydantic models.
