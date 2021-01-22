@@ -17,7 +17,7 @@ Faros Config is on [PyPI](https://pypi.org/project/faros-config/). If you are co
 To instantiate a development environment, you need at least python3 with the `venv` and `pip` modules, or `virtualenv` and `pip` or `pip3` in your `$PATH`. From the project root:
 
 ```shell
-pip install --upgrade --user pip setuptools wheel tox  # This installed the development dependencies for your user.
+pip install --upgrade --user pip setuptools wheel tox  # This installs the development dependencies for your user.
 
 # You should validate that the project works in your environment before you do anything to it.
 tox                                             # This lints, uses yarn to download JS dependencies, and runs the tests.
