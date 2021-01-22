@@ -18,6 +18,7 @@ class StrEnum(str, Enum):
 
     pass
 
+
 class PydanticEncoder(json.JSONEncoder):
     """Serialize Pydantic models.
 
