@@ -31,5 +31,5 @@ class PydanticEncoder(json.JSONEncoder):
             return obj.dict(exclude_none=True)
         elif isinstance(obj, ipaddress._IPAddressBase):
             return str(obj)
-        else:
+        else:  # pragma: nocover
             return json.JSONEncoder.default(self, obj)
