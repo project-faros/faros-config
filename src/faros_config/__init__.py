@@ -11,5 +11,6 @@ version of the Cluster Manager.
 """
 
 from .config import FarosConfig
+from .common import PydanticEncoder
 
-__all__ = ["FarosConfig"]
+__all__ = ["FarosConfig", "PydanticEncoder"]
