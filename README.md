@@ -14,7 +14,7 @@ Faros Config is on [PyPI](https://pypi.org/project/faros-config/). If you are co
 
 ## Development
 
-To instantiate a development environment, you need at least python3 with the `venv` module. From the project root:
+To instantiate a development environment, you need at least python3 with the `venv` and `pip` modules, or `virtualenv` and `pip` or `pip3` in your `$PATH`. From the project root:
 
 ```shell
 pip install --upgrade --user pip setuptools wheel tox  # This installed the development dependencies for your user.
