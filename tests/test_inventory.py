@@ -342,3 +342,7 @@ def test_inventory_initialization():
 
     for config_file in VALID_CONFIGS:
         instantiate_inventory(config_path=config_file)
+
+
+if __name__ == '__main__':
+    test_inventory_initialization()
