@@ -9,7 +9,7 @@ from faros_config.inventory import (
 )
 from faros_config.inventory.cli import main as cli
 
-from .conftest import VALID_CONFIGS
+from .conftest import VALID_CONFIGS, config_data
 
 
 class InventoryTest(object):
@@ -68,6 +68,27 @@ def test_inventory_cli():
         os.remove(ssh_private_key)
 
 
+def test_inventory_internals():
+    for config_file in VALID_CONFIGS:
+        with InventoryTest(config_file) as inv:
+            # Make sure that the bastion variables make it to router inventory
+            router_group = inv.inv.group('router')
+            become_pass = router_group.host('wan')['ansible_become_pass']
+            bastion = config_data[config_file]['bastion']
+            assert become_pass == bastion['become_pass']
+
+            # Make sure that non-existent groups aren't returned
+            assert inv.inv.group('fake_group_name') is None
+
+            # Make sure that adding new hosts drops them into all
+            inv.inv.add_host('testhost', hostname='86.7.53.09')
+            assert inv.inv.host('testhost')['ansible_host'] == '86.7.53.09'
+
+            # Make sure that adding new hosts in new groups creates them
+            inv.inv.add_host('testhost2', group='fake', hostname='86.7.53.09')
+            assert inv.inv.group('fake').host('testhost2') is not None
+
 if __name__ == '__main__':
     test_inventory_initialization()
     test_inventory_cli()
+    test_inventory_internals()
