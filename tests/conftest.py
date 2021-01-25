@@ -7,7 +7,8 @@ example_dir = os.path.realpath(os.path.join(
 
 VALID_CONFIGS = [
     f'{example_dir}/example_config.yml',
-    f'{example_dir}/example_config_with_install_drives.yml'
+    f'{example_dir}/example_config_with_install_drives.yml',
+    f'{example_dir}/example_config_with_classless_lan.yml'
 ]
 INVALID_CONFIGS = [f'{example_dir}/invalid-1.yml']
 

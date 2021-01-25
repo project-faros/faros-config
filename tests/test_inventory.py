@@ -88,6 +88,11 @@ def test_inventory_internals():
             inv.inv.add_host('testhost2', group='fake', hostname='86.7.53.09')
             assert inv.inv.group('fake').host('testhost2') is not None
 
+            # Validate static and dynamic pools
+            print(f'IPAM Static Pool: {inv.ipam.static_pool}')
+            print(f'IPAM Dynamic Pool: {inv.ipam.dynamic_pool}')
+
+
 if __name__ == '__main__':
     test_inventory_initialization()
     test_inventory_cli()
