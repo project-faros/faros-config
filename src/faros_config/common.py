@@ -5,7 +5,7 @@ This module contains common utility classes used throughout faros_config.
 import json
 import ipaddress
 from enum import Enum
-from pydantic import constr
+from pydantic import constr, BaseModel
 
 MacAddress = constr(regex=r'(([0-9A-Fa-f]{2}[-:]){5}[0-9A-Fa-f]{2})|(([0-9A-Fa-f]{4}\.){2}[0-9A-Fa-f]{4})')  # noqa: E501
 
@@ -16,9 +16,7 @@ class StrEnum(str, Enum):
     A mix-in of string and enum, representing itself as the string value.
     """
 
-    def __str__(self):
-        """Return the string value of the instantiated object."""
-        return self.value
+    pass
 
 
 class PydanticEncoder(json.JSONEncoder):
@@ -29,10 +27,9 @@ class PydanticEncoder(json.JSONEncoder):
 
     def default(self, obj):
         """Encode model objects based on their type."""
-        obj_has_dict = getattr(obj, "dict", False)
-        if obj_has_dict and callable(obj_has_dict):
+        if isinstance(obj, BaseModel) and callable(obj.dict):
             return obj.dict(exclude_none=True)
         elif isinstance(obj, ipaddress._IPAddressBase):
             return str(obj)
-        else:
+        else:  # pragma: nocover
             return json.JSONEncoder.default(self, obj)

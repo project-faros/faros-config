@@ -6,7 +6,7 @@ network:
     - HTTPS to Cluster Apps
     - HTTPS to Cockpit Panel
   lan:
-    subnet: 192.168.8.0/24
+    subnet: 192.168.8.0/25
     interfaces:
       - eno1
       - eno5

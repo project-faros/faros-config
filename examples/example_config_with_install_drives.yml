@@ -45,12 +45,15 @@ cluster:
     - name: node-0
       mac: da:d5:de:ad:be:ef
       mgmt_mac: fe:eb:da:ed:5d:ad
+      install_drive: /dev/nvme0n1
     - name: node-1
       mac: da:d5:de:ad:be:ef
       mgmt_mac: fe:eb:da:ed:5d:ad
+      install_drive: /dev/nvme0n1
     - name: node-2
       mac: da:d5:de:ad:be:ef
       mgmt_mac: fe:eb:da:ed:5d:ad
+      install_drive: /dev/nvme0n1
 proxy:
   http: proxy.faros.site
   https: secure-proxy.faros.site
