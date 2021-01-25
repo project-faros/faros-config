@@ -67,7 +67,7 @@ class FarosInventory(object):
         self._data[name] = {'hosts': [], 'vars': groupvars, 'children': []}
 
         if parent:
-            if parent not in self._data:
+            if parent not in self._data:  # pragma: nocover
                 self.add_group(parent)
             self._data[parent]['children'].append(name)
 
@@ -200,7 +200,7 @@ class FarosInventory(object):
                 cp_node_id=count
             )
             if node.install_drive is not None:
-                cp.host(node['name'])['install_disk'] = node.install_drive
+                cp.host(node.name)['install_disk'] = node.install_drive
 
         # VIRTUAL NODES
         virt = self.add_group(
