@@ -57,7 +57,7 @@ def main(argv: list = sys.argv[1:]):
         if mode == 0:
             print(inv.to_json())
 
-    except Exception as e:
+    except Exception as e:  # pragma: nocover
         if mode == 2:
             sys.stderr.write(config.error)
             sys.stderr.flush()
