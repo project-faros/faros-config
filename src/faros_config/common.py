@@ -16,7 +16,9 @@ class StrEnum(str, Enum):
     A mix-in of string and enum, representing itself as the string value.
     """
 
-    pass
+    @classmethod
+    def list(cls) -> list:
+        return [e.value for e in cls]
 
 
 class PydanticEncoder(json.JSONEncoder):
