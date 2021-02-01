@@ -18,6 +18,7 @@ class StrEnum(str, Enum):
 
     @classmethod
     def list(cls) -> list:
+        """Return a list of the available options in the Enum."""
         return [e.value for e in cls]
 
 
