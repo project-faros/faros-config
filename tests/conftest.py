@@ -10,7 +10,13 @@ VALID_CONFIGS = [
     f'{example_dir}/example_config_with_install_drives.yml',
     f'{example_dir}/example_config_with_classless_lan.yml'
 ]
-INVALID_CONFIGS = [f'{example_dir}/invalid-1.yml']
+
+# A list of paths to invalid configuration examples
+INVALID_CONFIGS = [
+    f'{example_dir}/invalid-no_dhcp.yml',
+    f'{example_dir}/invalid-too_few_nodes.yml',
+    f'{example_dir}/invalid-bad_hostname.yml'
+]
 
 config_data = {filename: yaml.safe_load(open(filename))
                for filename in VALID_CONFIGS + INVALID_CONFIGS}

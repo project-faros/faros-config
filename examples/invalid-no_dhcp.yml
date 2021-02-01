@@ -1,0 +1,43 @@
+network:
+  port_forward:
+    - SSH to Bastion
+  lan:
+    subnet: 192.168.8.0/24
+    interfaces: []
+    dhcp:
+      ignore_macs:
+        - name: node-0-eno1
+          mac: da:d5:de:ad:be:ef
+        - name: node-0-eno2
+          mac: da:d5:de:ad:be:ef
+        - name: node-0-eno3
+          mac: da:d5:de:ad:be:ef
+      extra_reservations:
+        - name: wifi
+          mac: da:d5:de:ad:be:ef
+          ip: 192.168.8.127
+        - name: chassis
+          mac: da:d5:de:ad:be:ef
+          ip: 192.168.8.50
+        - name: bastion-ilo
+          mac: da:d5:de:ad:be:ef
+          ip: 192.168.8.51
+        - name: client
+          mac: da:d5:de:ad:be:ef
+          ip: 192.168.8.52
+bastion:
+  become_pass: admin
+cluster:
+  pull_secret: ''
+  management:
+    provider: ilo
+    user: Administrator
+    password: ilo-pass
+  nodes:
+    # Not 3 nodes
+    - name: node-0
+      mac: ff:ff:ff:ff:ff:ff
+      mgmt_mac: ff:ff:ff:ff:ff:ff
+    - name: node-1
+      mac: ff:ff:ff:ff:ff:ff
+      mgmt_mac: ff:ff:ff:ff:ff:ff
