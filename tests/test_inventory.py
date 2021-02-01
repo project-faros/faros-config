@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Faros Configuration Tests - Inventory Instantiation."""
+
 import os
 import pytest
 from pprint import pprint
@@ -13,10 +15,14 @@ from .conftest import VALID_CONFIGS, config_data
 
 
 class InventoryTest(object):
+    """Helper class to provide context manager for inventory."""
+
     def __init__(self, config_path):
+        """Instantiate an inventory from config_path."""
         self.config_path = config_path
 
     def __enter__(self):
+        """Build and render an inventory with temp IPAM and fake SSH key."""
         print('in context')
         self.config = FarosInventoryConfig(self.config_path)
         self.ipam_file = mkstemp()[1]
@@ -29,17 +35,20 @@ class InventoryTest(object):
         return self
 
     def __exit__(self, *exc):
+        """Clean up the temporary inventory IPAM and SSH key."""
         os.remove(self.ipam_file)
         os.remove(self.ssh_private_key)
 
 
 def test_inventory_initialization():
+    """Inventories should initialize and not generate errors."""
     for config_file in VALID_CONFIGS:
         with InventoryTest(config_file) as inv:
             pprint(inv.json)
 
 
 def test_inventory_cli():
+    """Inventory should work when called from shell."""
     for config_file in VALID_CONFIGS:
         ipam_file = mkstemp()[1]
         ssh_private_key = mkstemp()[1]
@@ -69,6 +78,7 @@ def test_inventory_cli():
 
 
 def test_inventory_internals():
+    """Inventory object should enable various manipulation of hosts."""
     for config_file in VALID_CONFIGS:
         with InventoryTest(config_file) as inv:
             # Make sure that the bastion variables make it to router inventory
@@ -94,6 +104,7 @@ def test_inventory_internals():
 
 
 if __name__ == '__main__':
+    """Call tests when invoked directly."""
     test_inventory_initialization()
     test_inventory_cli()
     test_inventory_internals()

@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+"""Faros Configuration Tests - Example Validation."""
+
 import pytest
 from pprint import pprint
 from pydantic import ValidationError
@@ -8,7 +10,7 @@ from .conftest import VALID_CONFIGS, INVALID_CONFIGS
 
 
 def test_valid_config():
-    """Tests loading and dumping a valid config."""
+    """Test loading and dumping a valid config."""
     for configfile in VALID_CONFIGS:
         config = FarosConfig.from_yaml(configfile)
         config_json = config.to_json()
@@ -17,11 +19,13 @@ def test_valid_config():
 
 
 def test_invalid_config():
-    """Tests loading invalid configurations."""
+    """Test loading invalid configurations."""
     for configfile in INVALID_CONFIGS:
         with pytest.raises(ValidationError):
             _ = FarosConfig.from_yaml(configfile)
 
 
 if __name__ == '__main__':
+    """Call tests when invoked directly."""
     test_valid_config()
+    test_invalid_config()
