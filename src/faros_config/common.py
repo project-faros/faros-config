@@ -7,6 +7,7 @@ import ipaddress
 from enum import Enum
 from pydantic import constr, BaseModel
 
+HostName = constr(regex=r'^(?![0-9]+$)(?!-)[a-zA-Z0-9-]{,63}(?<!-)$')
 MacAddress = constr(regex=r'(([0-9A-Fa-f]{2}[-:]){5}[0-9A-Fa-f]{2})|(([0-9A-Fa-f]{4}\.){2}[0-9A-Fa-f]{4})')  # noqa: E501
 
 

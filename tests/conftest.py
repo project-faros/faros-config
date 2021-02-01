@@ -15,7 +15,11 @@ VALID_CONFIGS = [
     f'{example_dir}/example_config_with_classless_lan.yml'
 ]
 # A list of paths to invalid configuration examples
-INVALID_CONFIGS = [f'{example_dir}/invalid-1.yml']
+INVALID_CONFIGS = [
+    f'{example_dir}/invalid-no_dhcp.yml',
+    f'{example_dir}/invalid-too_few_nodes.yml',
+    f'{example_dir}/invalid-bad_hostname.yml'
+]
 
 # The raw dictionary objects loaded from the configurations.
 config_data = {filename: yaml.safe_load(open(filename))

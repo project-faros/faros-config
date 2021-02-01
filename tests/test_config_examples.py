@@ -12,6 +12,7 @@ from .conftest import VALID_CONFIGS, INVALID_CONFIGS
 def test_valid_config():
     """Test loading and dumping a valid config."""
     for configfile in VALID_CONFIGS:
+        print(configfile)
         config = FarosConfig.from_yaml(configfile)
         config_json = config.to_json()
         pprint(config)
