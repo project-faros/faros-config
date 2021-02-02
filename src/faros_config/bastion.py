@@ -11,6 +11,7 @@ class BastionConfig(BaseModel):
     """Configuration specific to the bastion host."""
 
     become_pass: str = Field(
+        alias="Sudo Password",
         description=("The password for the sudo user executing Faros on the "
                      "bastion.")
     )
