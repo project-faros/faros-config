@@ -2,8 +2,13 @@
 
 This module contains the WTForms definitions for the models.
 """
+import enum
 from flask_wtf import FlaskForm
+import ipaddress
+from typing import Tuple
 from wtforms import (
+    Field,
+    FieldList,
     FormField,
     PasswordField,
     SelectField,
@@ -14,7 +19,6 @@ from wtforms import (
     validators,
     widgets
 )
-from typing import Tuple
 
 
 # TODO: Add validators that use pydantic checking and produce verbose errors on
@@ -36,122 +40,106 @@ class MultiCheckboxField(SelectMultipleField):
     option_widget = widgets.CheckboxInput()
 
 
-class NetworkForm(FlaskForm):
-    """Networking configuration form."""
-
-    port_forward = MultiCheckboxField(
-        'Services',
-        [],
-        choices=[
-            double_str('SSH to Bastion'),
-            double_str('HTTPS to Cluster API'),
-            double_str('HTTP to Cluster Apps'),
-            double_str('HTTPS to Cluster Apps'),
-            double_str('HTTPS to Cockpit Panel'),
-        ],
-        description=('Select the services that should be forwarded through the'
-                     " bastion's gateway.")
-    )
-    subnet = StringField(
-        'Subnet',
-        [validators.required()],
-        default='192.168.8.0/24',
-        description=('Enter the subnet to use for the FarosLAN network in CIDR'
-                     ' notation.')
-    )
-    interfaces = MultiCheckboxField(
-        'Interfaces',
-        [validators.required()],
-        choices=[double_str('eno{}'.format(num + 1)) for num in range(5)],
-        description=('Select the bastion interfaces to place on the FarosLAN'
-                     ' network.')
-    )
-    dns_forward_resolvers = TextAreaField(
-        'Upstream DNS',
-        description=('Enter a newline-delimited list of all upstream DNS'
-                     ' resolvers you would like to use, if different than'
-                     ' those from the WAN DHCP.')
-    )
+def should_be_string(field=None) -> bool:
+    """Determine if a pydantic Field should be represented by a string."""
+    if field.type_ == str:
+        # It's a simple string field
+        return True
+    if getattr(field.type_, '__args__') is not None:
+        # It's a Union
+        if ipaddress.IPv4Address in field.type_.__args__:
+            # It's a union of IP addresses
+            return True
+        if ipaddress.IPv4Network in field.type_.__args__:
+            # It's a union of IP networks
+            return True
+    # It's not a string-type field
+    return False
 
 
-class SecretsForm(FlaskForm):
-    """Secret configuration form."""
-
-    become_pass = PasswordField(
-        'Sudo password',
-        [validators.required()],
-        description=('Enter the password required to sudo as your'
-                     ' administrative user on the bastion host.')
-    )
-    pull_secret = PasswordField(
-        'Pull secret',
-        [validators.required()],
-        description=('Enter your pull secret, acquired from '
-                     'https://cloud.redhat.com.')
-    )
+def should_be_secret(field=None) -> bool:
+    """Determine if a pydantic string field should be obscured."""
+    alias = field.alias.lower()
+    if 'password' in alias or 'secret' in alias:
+        return True
+    return False
 
 
-class ManagementForm(FlaskForm):
-    """Management provider configuration form."""
+def pydantic_field(field=None,
+                   depth: int = 0,
+                   parents: str = '') -> Tuple[str, Field]:
+    """Return a WTForms Field of the appropriate type for the model field."""
+    # Keep form field names unique through_nesting
+    if parents != '':
+        field_name = parents + f'_{field.name}'
+    else:
+        field_name = field.name
+    # Always validate with pydantic
+    field_validators = [field.validate]
+    # If it's not marked as Optional in model, then make it required
+    if field.required:
+        field_validators.append(validators.required())
+    # Build base positional args w/ friendly name and validator
+    args = (field.alias, field_validators)
+    # Build base keyword args w/ default and description
+    kwargs = {
+        "default": field.default,
+        "description": field.field_info.description
+    }
 
-    management_provider = SelectField(
-        'Provider',
-        [validators.required()],
-        choices=[('ilo', 'iLO',)],
-        description='Select management provider type.'
-    )
-    management_username = StringField(
-        'Username',
-        [validators.required()],
-        description='Enter your management provider user name.'
-    )
-    management_password = PasswordField(
-        'Password',
-        [validators.required()],
-        description='Enter your management provider password.'
-    )
-
-
-class ProxyForm(FlaskForm):
-    """Proxy configuration form."""
-
-    proxy_http = StringField(
-        'HTTP',
-        description='Enter the proxy HTTP endpoint'
-    )
-    proxy_https = StringField(
-        'HTTPS',
-        description='Enter the proxy HTTPS endpoint'
-    )
-    noproxy = TextAreaField(
-        'Ignore',
-        description=('Enter a newline-delimited list of the websites that'
-                     ' should bypass the proxy.')
-    )
-    proxy_ca = TextAreaField(
-        'CA',
-        description=('Enter the full Certificate Authority for the HTTPS'
-                     'proxy in PEM format.')
-    )
+    if field.is_complex() and field.type_ == field.outer_type_:
+        # This is a nested model
+        # we need to recurse via field.type_.__fields__, and return a FlaskForm
+        raise NotImplementedError
+    elif field.is_complex():
+        # This is a complex type like List[str]
+        if field.type_ == str:
+            # This list of strings should just have defaults set for choices
+            return (field_name, MultiCheckboxField(
+                *args,
+                choices=[(v, v) for v in field.default],
+                **kwargs
+            ))
+        elif field.type_.__class__ == enum.EnumMeta:
+            # This list of Enums has set, hard-coded checkboxes
+            return (field_name, MultiCheckboxField(
+                *args,
+                choices=[(v, v) for v in field.type_.list()],
+                **kwargs
+            ))
+        elif getattr(field.type_, '__args__') is not None:
+            # This is a list of IPAddress/IPNetwork unions
+            return (field_name, FieldList(StringField(*args, **kwargs)))
+    else:
+        if should_be_string(field):
+            if should_be_secret(field):
+                # This is a secret or password
+                return (field_name, PasswordField(*args, **kwargs))
+            # This is a simple string field
+            # TODO: Figure out how to identify TextArea fields
+            return (field_name, StringField(*args, **kwargs))
+        elif field.type_.__class__ == enum.EnumMeta:
+            # This is a single-entry enum
+            return (field_name, SelectField(
+                *args,
+                choices=[(v, v) for v in field.type_.items()]
+                **kwargs
+            )
+    raise RuntimeError(f'Unable to classify field, {field_name}')
 
 
 class ConfigForm(FlaskForm):
     """Faros Configuration Form."""
 
-    network = FormField(
-        NetworkForm,
-        description='Configuration of the FarosLAN Network'
-    )
-    secrets = FormField(
-        SecretsForm,
-        description='Configuration of secrets necessary for Faros deployment'
-    )
-    management = FormField(
-        ManagementForm,
-        description='Configuration of the Management Provider for nodes'
-    )
-    proxy = FormField(
-        ProxyForm,
-        description='Configuration of an outbound HTTP/S proxy'
-    )
-    submit = SubmitField('Submit')
+    def __init__(self, *args, **kwargs) -> None:
+        """Dynamically build form fields."""
+        for section in FarosConfig.__fields__:
+            # Pull the Pydantic data for the subsection
+            subsection = FarosConfig.__fields__[section]
+            # Generate a form for the subsection
+            subform = FormField(pydantic_field(subsection),
+                                description=subsection.field_info.description)
+            setattr(self, section, subform)
+
+        self.submit = SubmitField('Submit')
+        super().__init__(*args, **kwargs)
