@@ -15,10 +15,11 @@ from wtforms import (
     SelectMultipleField,
     SubmitField,
     StringField,
-    TextAreaField,
     validators,
     widgets
 )
+
+from faros_config import FarosConfig
 
 
 # TODO: Add validators that use pydantic checking and produce verbose errors on
@@ -122,9 +123,9 @@ def pydantic_field(field=None,
             # This is a single-entry enum
             return (field_name, SelectField(
                 *args,
-                choices=[(v, v) for v in field.type_.items()]
+                choices=[(v, v) for v in field.type_.items()],
                 **kwargs
-            )
+            ))
     raise RuntimeError(f'Unable to classify field, {field_name}')
 
 
