@@ -15,3 +15,8 @@ class BastionConfig(BaseModel):
         description=("The password for the sudo user executing Faros on the "
                      "bastion.")
     )
+
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True

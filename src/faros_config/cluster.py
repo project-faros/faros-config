@@ -14,6 +14,11 @@ class ManagementProviderItem(StrEnum):
 
     iLO = "ilo"
 
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True
+
 
 class ManagementConfig(BaseModel):
     """Configuration for management of bare metal nodes."""
@@ -31,6 +36,11 @@ class ManagementConfig(BaseModel):
         alias="Management Password",
         description="The password for the management provider."
     )
+
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True
 
 
 class NodeConfig(BaseModel):
@@ -53,6 +63,11 @@ class NodeConfig(BaseModel):
         alias="Node Installation Drive",
         description="The device path for the drive to install CoreOS onto."
     )
+
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True
 
 
 class ClusterConfig(BaseModel):
@@ -78,3 +93,8 @@ class ClusterConfig(BaseModel):
         if len(v) != 3:
             raise ValueError('must have exactly three nodes')
         return v
+
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True

@@ -26,3 +26,8 @@ class ProxyConfig(BaseModel):
         alias="HTTPS Proxy CA",
         description="The HTTPS proxy endpoint's certificate authority."
     )
+
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True

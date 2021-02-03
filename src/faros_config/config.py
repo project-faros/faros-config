@@ -46,3 +46,8 @@ class FarosConfig(BaseModel):
         """Serialize a FarosConfig object to JSON text."""
         return json.dumps(self, sort_keys=True, indent=4,
                           separators=(',', ': '), cls=PydanticEncoder)
+
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True
