@@ -31,6 +31,11 @@ class NameMacPair(BaseModel):
         description="The MAC address you'd like ignored."
     )
 
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True
+
 
 class NameMacIpSet(BaseModel):
     """The config model for a name, MAC address, and IP address type."""
@@ -48,6 +53,11 @@ class NameMacIpSet(BaseModel):
         description="The IP address you'd like assigned for the MAC address."
     )
 
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True
+
 
 class DhcpConfig(BaseModel):
     """Configuration of the DHCP server on the bastion."""
@@ -62,6 +72,11 @@ class DhcpConfig(BaseModel):
         alias="Extra Reservations",
         description="The list of extra DHCP static reservations."
     )
+
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True
 
 
 class LanConfig(BaseModel):
@@ -87,6 +102,11 @@ class LanConfig(BaseModel):
         description="Configuration of the DHCP server on the bastion."
     )
 
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True
+
 
 class NetworkConfig(BaseModel):
     """Networking configuration on the bastion."""
@@ -101,3 +121,8 @@ class NetworkConfig(BaseModel):
         alias="LAN Configuration",
         description="Configuration of the Faros LAN."
     )
+
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True
