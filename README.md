@@ -4,10 +4,6 @@ This small library is used to validate configuration provided to Project Faros. 
 
 [![codecov](https://codecov.io/gh/project-faros/faros-config/branch/master/graph/badge.svg?token=g4BJV474Tm)](https://codecov.io/gh/project-faros/faros-config) [![tests](https://img.shields.io/github/workflow/status/project-faros/faros-config/Test%20Python/master)](https://github.com/project-faros/faros-config/actions?query=workflow%3A%22Test+Python%22) [![downloads](https://img.shields.io/pypi/dw/faros-config?label=PyPI%20downloads)](https://pypi.org/project/faros-config/)
 
-## User Interface
-
-Also included in the package is a user interface based on a Flask application. You can run it with any WSGI server, or a simple `flask run` for testing purposes. See the [Development](#development) section for more details. It is designed for users to generate, and validate, Project Faros compliant YAML configuration files for use in a Project Faros cluster-manager container. It can run outside of a cluster-manager container in order to generate raw YAML files, rather than placing them directly into the appropriate data directory, as well.
-
 ## Installation
 
 Faros Config is on [PyPI](https://pypi.org/project/faros-config/). If you are connected to the internet, you can run `pip install faros-config` to install the configuration library and web application. You shouldn't, though, as it's designed to be installed when building cluster-manager containers.
@@ -31,14 +27,7 @@ pip install -e .                                # This installs the project to t
 pip install pytest python-dotenv
 dotenv -f devel.env run python3 -m tests.test_config_examples
 dotenv -f devel.env run python3 -m tests.test_inventory
-
-# To run the web app locally and see changes to the code reflected live, you can run
-export FLASK_APP=faros_config.ui                # This tells flask which app you're hacking on.
-export FLASK_ENV=development                    # This tells flask to run in "development" mode.
-flask run                                       # This starts the web application on localhost at HTTP port 5000
 ```
-
-You can work on any part of the application at this point, testing your changes in a browser pointed to `http://localhost:5000`. If you would like to test these changes from another host, for example to see how it looks from your phone, you could do `flask run --host=0.0.0.0` instead. Ensure that you've got your firewall set up to support the necessary port.
 
 ## Releases
 

@@ -1,3 +1,1 @@
-graft src/faros_config/ui/static
-graft src/faros_config/ui/templates
 global-exclude *.py[cod]
