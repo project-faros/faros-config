@@ -23,6 +23,7 @@ class StrEnum(str, Enum):
         return [e.value for e in cls]
 
     def __str__(self) -> str:
+        """Return only the value of the enum when cast to String."""
         return self.value
 
 
