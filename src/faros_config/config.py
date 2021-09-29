@@ -3,18 +3,18 @@
 This module contains the top level configuration model for Project Faros.
 """
 import json
-from pydantic import BaseModel, Field
+from pydantic import Field
 from typing import Optional
 import yaml
 
 from .bastion import BastionConfig
 from .cluster import ClusterConfig
-from .common import PydanticEncoder
+from .common import FarosBaseModel, PydanticEncoder
 from .network import NetworkConfig
 from .proxy import ProxyConfig
 
 
-class FarosConfig(BaseModel):
+class FarosConfig(FarosBaseModel):
     """Validate, serialize, and deserialize Faros configurations."""
 
     network: NetworkConfig = Field(
@@ -46,8 +46,3 @@ class FarosConfig(BaseModel):
         """Serialize a FarosConfig object to JSON text."""
         return json.dumps(self, sort_keys=True, indent=4,
                           separators=(',', ': '), cls=PydanticEncoder)
-
-    class Config:
-        """Configuration class for Pydantic models."""
-
-        allow_population_by_field_name = True

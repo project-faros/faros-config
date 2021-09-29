@@ -3,10 +3,10 @@
 This module contains the configuration models for the network section.
 """
 from ipaddress import IPv4Address, IPv6Address, IPv4Network, IPv6Network
-from pydantic import BaseModel, Field
+from pydantic import Field
 from typing import List, Optional, Union
 
-from .common import MacAddress, StrEnum
+from .common import FarosBaseModel, MacAddress, StrEnum
 
 
 class PortForwardConfigItem(StrEnum):
@@ -19,7 +19,7 @@ class PortForwardConfigItem(StrEnum):
     HTTPS_TO_COCKPIT_PANEL = "HTTPS to Cockpit Panel"
 
 
-class NameMacPair(BaseModel):
+class NameMacPair(FarosBaseModel):
     """The config model for a basic pairing of name and MAC address."""
 
     name: str = Field(
@@ -31,13 +31,8 @@ class NameMacPair(BaseModel):
         description="The MAC address you'd like ignored."
     )
 
-    class Config:
-        """Configuration class for Pydantic models."""
 
-        allow_population_by_field_name = True
-
-
-class NameMacIpSet(BaseModel):
+class NameMacIpSet(FarosBaseModel):
     """The config model for a name, MAC address, and IP address type."""
 
     name: str = Field(
@@ -53,13 +48,8 @@ class NameMacIpSet(BaseModel):
         description="The IP address you'd like assigned for the MAC address."
     )
 
-    class Config:
-        """Configuration class for Pydantic models."""
 
-        allow_population_by_field_name = True
-
-
-class DhcpConfig(BaseModel):
+class DhcpConfig(FarosBaseModel):
     """Configuration of the DHCP server on the bastion."""
 
     ignore_macs: Optional[List[NameMacPair]] = Field(
@@ -73,13 +63,8 @@ class DhcpConfig(BaseModel):
         description="The list of extra DHCP static reservations."
     )
 
-    class Config:
-        """Configuration class for Pydantic models."""
 
-        allow_population_by_field_name = True
-
-
-class LanConfig(BaseModel):
+class LanConfig(FarosBaseModel):
     """Configuration of the Faros LAN."""
 
     subnet: Union[IPv4Network, IPv6Network] = Field(
@@ -102,13 +87,8 @@ class LanConfig(BaseModel):
         description="Configuration of the DHCP server on the bastion."
     )
 
-    class Config:
-        """Configuration class for Pydantic models."""
 
-        allow_population_by_field_name = True
-
-
-class NetworkConfig(BaseModel):
+class NetworkConfig(FarosBaseModel):
     """Networking configuration on the bastion."""
 
     port_forward: List[PortForwardConfigItem] = Field(
@@ -121,8 +101,3 @@ class NetworkConfig(BaseModel):
         alias="LAN Configuration",
         description="Configuration of the Faros LAN."
     )
-
-    class Config:
-        """Configuration class for Pydantic models."""
-
-        allow_population_by_field_name = True

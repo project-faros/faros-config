@@ -3,10 +3,10 @@
 This module contains the configuration models for the cluster section. This
 includes configuration of cluster-node specific information.
 """
-from pydantic import BaseModel, Field, validator
+from pydantic import Field, validator
 from typing import List, Optional
 
-from .common import HostName, MacAddress, StrEnum
+from .common import FarosBaseModel, HostName, MacAddress, StrEnum
 
 
 class ManagementProviderItem(StrEnum):
@@ -14,13 +14,8 @@ class ManagementProviderItem(StrEnum):
 
     iLO = "ilo"
 
-    class Config:
-        """Configuration class for Pydantic models."""
 
-        allow_population_by_field_name = True
-
-
-class ManagementConfig(BaseModel):
+class ManagementConfig(FarosBaseModel):
     """Configuration for management of bare metal nodes."""
 
     provider: ManagementProviderItem = Field(
@@ -37,13 +32,8 @@ class ManagementConfig(BaseModel):
         description="The password for the management provider."
     )
 
-    class Config:
-        """Configuration class for Pydantic models."""
 
-        allow_population_by_field_name = True
-
-
-class NodeConfig(BaseModel):
+class NodeConfig(FarosBaseModel):
     """Configuration for Faros cluster nodes."""
 
     name: HostName = Field(
@@ -64,13 +54,8 @@ class NodeConfig(BaseModel):
         description="The device path for the drive to install CoreOS onto."
     )
 
-    class Config:
-        """Configuration class for Pydantic models."""
 
-        allow_population_by_field_name = True
-
-
-class ClusterConfig(BaseModel):
+class ClusterConfig(FarosBaseModel):
     """The cluster config section model."""
 
     pull_secret: str = Field(
@@ -93,8 +78,3 @@ class ClusterConfig(BaseModel):
         if len(v) != 3:
             raise ValueError('must have exactly three nodes')
         return v
-
-    class Config:
-        """Configuration class for Pydantic models."""
-
-        allow_population_by_field_name = True

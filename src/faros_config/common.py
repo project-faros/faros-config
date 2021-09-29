@@ -22,6 +22,18 @@ class StrEnum(str, Enum):
         """Return a list of the available options in the Enum."""
         return [e.value for e in cls]
 
+    def __str__(self) -> str:
+        return self.value
+
+
+class FarosBaseModel(BaseModel):
+    """Faros Base Model for configuration classes."""
+
+    class Config:
+        """Configuration class for Pydantic models."""
+
+        allow_population_by_field_name = True
+
 
 class PydanticEncoder(json.JSONEncoder):
     """Serialize Pydantic models.

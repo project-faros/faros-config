@@ -2,11 +2,13 @@
 
 This module contains the configuration models for the proxy section.
 """
-from pydantic import BaseModel, Field
+from pydantic import Field
 from typing import List, Optional
 
+from .common import FarosBaseModel
 
-class ProxyConfig(BaseModel):
+
+class ProxyConfig(FarosBaseModel):
     """Configuration of the HTTP/S proxy for the cluster."""
 
     http: Optional[str] = Field(
@@ -26,8 +28,3 @@ class ProxyConfig(BaseModel):
         alias="HTTPS Proxy CA",
         description="The HTTPS proxy endpoint's certificate authority."
     )
-
-    class Config:
-        """Configuration class for Pydantic models."""
-
-        allow_population_by_field_name = True
