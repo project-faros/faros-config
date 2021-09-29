@@ -2,14 +2,29 @@
 
 This module contains the configuration models for the proxy section.
 """
-from pydantic import BaseModel
-from typing import List
+from pydantic import Field
+from typing import List, Optional
+
+from .common import FarosBaseModel
 
 
-class ProxyConfig(BaseModel):
-    """The proxy config section model."""
+class ProxyConfig(FarosBaseModel):
+    """Configuration of the HTTP/S proxy for the cluster."""
 
-    http: str
-    https: str
-    noproxy: List[str]
-    ca: str
+    http: Optional[str] = Field(
+        alias="HTTP Proxy",
+        description="The HTTP proxy endpoint"
+    )
+    https: Optional[str] = Field(
+        alias="HTTPS Proxy",
+        description="The HTTPS proxy endpoint"
+    )
+    noproxy: Optional[List[str]] = Field(
+        [],
+        alias="Proxy-exempt Sites",
+        description="The list of sites that shouldn't be proxied."
+    )
+    ca: Optional[str] = Field(
+        alias="HTTPS Proxy CA",
+        description="The HTTPS proxy endpoint's certificate authority."
+    )

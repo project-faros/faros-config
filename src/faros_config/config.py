@@ -3,24 +3,36 @@
 This module contains the top level configuration model for Project Faros.
 """
 import json
-from pydantic import BaseModel
+from pydantic import Field
 from typing import Optional
 import yaml
 
 from .bastion import BastionConfig
 from .cluster import ClusterConfig
-from .common import PydanticEncoder
+from .common import FarosBaseModel, PydanticEncoder
 from .network import NetworkConfig
 from .proxy import ProxyConfig
 
 
-class FarosConfig(BaseModel):
+class FarosConfig(FarosBaseModel):
     """Validate, serialize, and deserialize Faros configurations."""
 
-    network: NetworkConfig
-    bastion: BastionConfig
-    cluster: ClusterConfig
-    proxy: Optional[ProxyConfig]
+    network: NetworkConfig = Field(
+        alias="Network Configuration",
+        description="Configuration of the FarosLAN and WAN networks."
+    )
+    bastion: BastionConfig = Field(
+        alias="Bastion Configuration",
+        description="Configuration of bastion-specific settings."
+    )
+    cluster: ClusterConfig = Field(
+        alias="Cluster Configuration",
+        description="Configuration of cluster settings related to the nodes."
+    )
+    proxy: Optional[ProxyConfig] = Field(
+        alias="Proxy Configuration",
+        description="Configuration of HTTP/S proxy settings for the cluster."
+    )
 
     @classmethod
     def from_yaml(cls, yaml_file: str) -> 'FarosConfig':
